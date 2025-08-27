@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  ldagent-backend:
+    build: .
+    container_name: ldagent-backend
+    restart: unless-stopped
+    ports:
+      - "${PORT-13000}:13000"
+    environment:
+      PORT: 13000
+      CORS_ORIGIN: ${CORS_ORIGIN-*}
+      AUTH_TOKEN: ${AUTH_TOKEN-CHANGE_ME_BACKEND_TOKEN}
+      WS_PATH: ${WS_PATH-/ws}
+      WS_AUTH_HEADER: ${WS_AUTH_HEADER-Authorization}
+      WS_AUTH_SCHEME: ${WS_AUTH_SCHEME-Bearer}
+      WS_TOKEN: ${WS_TOKEN-CHANGE_ME_DEVICE_TOKEN}
