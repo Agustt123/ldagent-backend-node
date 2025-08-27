@@ -5,14 +5,16 @@ import { z } from 'zod';
 
 export function buildRoutes(registry) {
   const r = Router();
-  r.use(requireBearer);
+  //r.use(requireBearer);
+
+  r.get('/', (req, res) => { res.json({ ok: true, mensage: 'LD-Agent Backend ALEEEE' }); });
 
   r.get('/devices', (req, res) => { res.json({ devices: registry.list() }); });
 
   const CmdSchema = z.object({
     id: z.string().optional(),
     op: z.enum(['torch']),
-    state: z.enum(['on','off','blink']).optional(),
+    state: z.enum(['on', 'off', 'blink']).optional(),
     times: z.number().int().min(1).max(20).optional(),
     intervalMs: z.number().int().min(50).max(5000).optional(),
   });
@@ -32,7 +34,7 @@ export function buildRoutes(registry) {
   r.post('/torch', (req, res) => {
     const { deviceId, state, times, intervalMs, id } = req.body || {};
     if (!deviceId || !state) return res.status(400).json({ error: 'missing deviceId/state' });
-    const payload = { id: id || String(Date.now()), op: 'torch', state, ...(times?{times}:{}), ...(intervalMs?{intervalMs}:{}) };
+    const payload = { id: id || String(Date.now()), op: 'torch', state, ...(times ? { times } : {}), ...(intervalMs ? { intervalMs } : {}) };
     try { registry.send(deviceId, payload); res.json({ ok: true, sent: payload }); }
     catch (e) { res.status(400).json({ error: e.message }); }
   });
@@ -45,6 +47,7 @@ export function buildRoutes(registry) {
     try { const payload = { id: id || String(Date.now()), ...cmd }; registry.send(deviceId, payload); res.json({ ok: true, sent: payload }); }
     catch (e) { res.status(400).json({ error: e.message }); }
   });
+
 
   return r;
 }
