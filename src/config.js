@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 export const CONFIG = {
-  PORT: parseInt(process.env.PORT || '13000', 10),
+  PORT: parseInt(process.env.PORT || '13001', 10),
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
   AUTH_TOKEN: process.env.AUTH_TOKEN || 'CHANGE_ME_BACKEND_TOKEN',
   WS_PATH: process.env.WS_PATH || '/ws',
